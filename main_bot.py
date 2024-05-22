@@ -177,7 +177,7 @@ async def unsubscribe(message: types.Message):
             "На данный момент, вы не были подписаны на новостную рассылку...",
         )
     else:
-        # если пользователь есть, то обнавляем статутс
+        # если пользователь есть, то обновляем статутс
         db.update_subcription(message.from_user.id, "false")
         await bot.send_message(
             message.chat.id, "Вы успешно отписались от новостной рассылки\U0001F612"
