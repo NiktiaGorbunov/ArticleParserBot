@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  bot:
+    build: .
+    container_name: api
+    environment:
+      - BOT_TOKEN='7144553151:AAEMSiVHanBoH_CCl7ad2O2ERq5hhdV7vcQ'
+    volumes:
+      - .:/app
+      - ./db.db:/app/db.db
