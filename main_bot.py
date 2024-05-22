@@ -112,7 +112,9 @@ async def rambler_check():
     while True:
         await asyncio.sleep(40)
 
-        with open("last_article/rambler_last_article.json") as json_file:
+        with open(
+            "last_article/rambler_last_article.json", encoding="UTF-8"
+        ) as json_file:
             old_article = json.load(json_file)
 
         last_article = rambler_parser.get_last_article()
