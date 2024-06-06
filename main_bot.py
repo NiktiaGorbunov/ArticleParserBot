@@ -45,18 +45,10 @@ async def rbc_check():
 
         last_article = rbc_parser.get_last_article()
 
-        if old_article["id"] != last_article["id"]:
-            db = SQLighter('db.db')
-            all_subscribed_users = db.get_subcriptions(status="true")
+        if old_article["url"] != last_article["url"]:
 
-            for i in all_subscribed_users:
-                try:
-                    await bot.send_message(i[0], text='<strong>' + last_article["title"] + '</strong>' +
-                                                      '\n\n' + last_article["url"], parse_mode='HTML')
-                except:
-                    pass
+            await send_message(bot, last_article)
 
-            db.close()
             with open('last_article/rbc_last_article.json', 'w') as json_file:
                 json.dump(last_article, json_file)
 
@@ -72,16 +64,7 @@ async def ria_check():
         last_article = ria_parser.get_last_article()
 
         if old_article["url"] != last_article["url"]:
-            db = SQLighter('db.db')
-            all_subscribed_users = db.get_subcriptions(status="true")
-
-            for i in all_subscribed_users:
-                try:
-                    await bot.send_message(i[0], text='<strong>' + last_article["title"] + '</strong>' + '\n\n' + last_article["url"], parse_mode='HTML')
-                except:
-                    pass
-
-            db.close()
+            await send_message(bot, last_article)
 
             with open('last_article/ria_last_article.json', 'w') as json_file:
                 json.dump(last_article, json_file)
