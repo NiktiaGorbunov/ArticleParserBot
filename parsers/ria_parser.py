@@ -9,13 +9,15 @@ def get_last_article():
     last_article_url = soup.find("div", class_="list list-tags").find_all("div", class_="list-item")[0].find_next("div", class_="list-item__content").find("a", class_="list-item__title color-font-hover-only").attrs["href"]
     last_article_title = soup.find("div", class_="list list-tags").find_all("div", class_="list-item")[0].find_next("div", class_="list-item__content").find("a", class_="list-item__title color-font-hover-only").text
 
-
+    response = requests.get(last_article_url)
+    soup = bs(response.content, "html.parser")
+    last_article_text = soup.find("div", class_="article__meta").find("div", itemprop="articleBody").text
 
     last_article = {
             "id": None,
             "url": last_article_url,
             "title": last_article_title,
-
+            "text": last_article_text
     }
 
     return last_article
