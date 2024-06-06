@@ -1,1 +1,1 @@
-tokenTG = '5410906696:AAGNOf2KUWrNRKt5OKGXsu0QlDkilhCMG68'
+tokenTG = ''
