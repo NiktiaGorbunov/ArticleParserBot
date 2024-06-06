@@ -9,11 +9,17 @@ def get_last_article():
     last_article_url = soup.find("div", class_="_3Q3a3 _3TiUi").find_all("div", class_="_4Niiv JbKe8")[0].find_next("a", class_="_1uRkW").attrs["href"]
     last_article_title = soup.find("div", class_="_3Q3a3 _3TiUi").find_all("div", class_="_4Niiv JbKe8")[0].find_next("a", class_="_1uRkW").find("div", class_="_2VIgt _1z1vG").find("img", class_="_3hvpU").attrs["alt"]
 
+    response = requests.get(last_article_url)
+    soup = bs(response.content, "html.parser")
+    last_article_text = soup.find("div", class_="_2hdv1").text
+
     last_article = {
             "id": None,
             "url": last_article_url,
             "title": last_article_title,
+            "text": last_article_text
     }
 
     return last_article
+
 

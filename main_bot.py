@@ -97,23 +97,35 @@ async def rambler_check():
         last_article = rambler_parser.get_last_article()
 
         if old_article["url"] != last_article["url"]:
-            db = SQLighter('db.db')
-            all_subscribed_users = db.get_subcriptions(status="true")
 
-            for i in all_subscribed_users:
-                try:
-                    await bot.send_message(i[0], text='<strong>' + last_article["title"] + '</strong>' + '\n\n' +
-                                                      last_article["url"], parse_mode='HTML')
-                except:
-                    pass
-
-            db.close()
+            await send_message(bot, last_article)
 
             with open('last_article/rambler_last_article.json', 'w') as json_file:
                 json.dump(last_article, json_file)
 
 
+async def send_message(bot, article):
+    """
+    :param bot:
+    :param article:
+    title - заголовок статьи
+    url - ссылка на статью
+    text - текст статьи
 
+    """
+    db = SQLighter('db.db')
+    all_subscribed_users = db.get_subcriptions(status="true")
+
+    for i in all_subscribed_users:
+        try:
+            # для обработки текста отправить содержимое статьи в классификатор
+            # ESG_classificator = article["text"]
+            await bot.send_message(i[0], text='<strong>' + article["title"] + '</strong>' + '\n\n' +
+                                              article["url"], parse_mode='HTML')
+        except:
+            pass
+
+    db.close()
 
 
 #активизация подписки
