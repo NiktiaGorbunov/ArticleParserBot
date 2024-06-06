@@ -121,7 +121,7 @@ async def send_message(bot, article):
             # для обработки текста отправить содержимое статьи в классификатор
             # ESG_classificator = article["text"]
             await bot.send_message(i[0], text='<strong>' + article["title"] + '</strong>' + '\n\n' +
-                                              article["url"], parse_mode='HTML')
+                                              article["url"] + '\n\n' + article["text"], parse_mode='HTML')
         except:
             pass
 
