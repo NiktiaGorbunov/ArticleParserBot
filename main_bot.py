@@ -90,7 +90,6 @@ async def rambler_check():
 
 async def esg_check(bot, article):
     url = "http://5.39.220.103:5009/ask"
-
     data = {
         "messages": [
             {"role": "system", "content": f"Ты определяешь, является ли новость ESG новостью"
@@ -101,10 +100,12 @@ async def esg_check(bot, article):
     }
 
     response = requests.post(url, json=data)
-
+    print("chek")
     if response.status_code == 200:
         response_data = response.json()
-        if response_data['response'] == 'да':
+        print(response_data)
+        if response_data['response'] == 'Да':
+            print(response_data['response'])
             await send_message(bot, article)
     # else:
     #     return f"Error: {response.status_code}, {response.text}"
@@ -119,6 +120,7 @@ async def send_message(bot, article):
     text - текст статьи
 
     """
+
     db = SQLighter('db.db')
     all_subscribed_users = db.get_subcriptions(status="true")
 
@@ -126,8 +128,9 @@ async def send_message(bot, article):
         try:
             # для обработки текста отправить содержимое статьи в классификатор
             # ESG_classificator = article["text"]
+            print('отправка сообщения')
             await bot.send_message(i[0], text='<strong>' + article["title"] + '</strong>' + '\n\n' +
-                                              article["url"] + '\n\n' + article["text"], parse_mode='HTML')
+                                              article["url"], parse_mode='HTML')
         except:
             pass
 
