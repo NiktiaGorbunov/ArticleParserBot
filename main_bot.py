@@ -3,6 +3,7 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 import asyncio
 import json
+import requests
 
 import config
 from parsers import rbc_parser, ria_parser, rambler_parser
@@ -47,7 +48,7 @@ async def rbc_check():
 
         if old_article["url"] != last_article["url"]:
 
-            await send_message(bot, last_article)
+            await esg_check(bot, last_article)
 
             with open('last_article/rbc_last_article.json', 'w') as json_file:
                 json.dump(last_article, json_file)
@@ -64,7 +65,7 @@ async def ria_check():
         last_article = ria_parser.get_last_article()
 
         if old_article["url"] != last_article["url"]:
-            await send_message(bot, last_article)
+            await esg_check(bot, last_article)
 
             with open('last_article/ria_last_article.json', 'w') as json_file:
                 json.dump(last_article, json_file)
@@ -81,10 +82,32 @@ async def rambler_check():
 
         if old_article["url"] != last_article["url"]:
 
-            await send_message(bot, last_article)
+            await esg_check(bot, last_article)
 
             with open('last_article/rambler_last_article.json', 'w') as json_file:
                 json.dump(last_article, json_file)
+
+
+async def esg_check(bot, article):
+    url = "http://5.39.220.103:5009/ask"
+
+    data = {
+        "messages": [
+            {"role": "system", "content": f"Ты определяешь, является ли новость ESG новостью"
+                                          f"Отвечай только на поставленный вопрос, не уходи от темы вопроса. "
+                                          f"Ты можешь писать только да или нет"},
+            {"role": "user", "content": f"Относиться ли данная статья к ESG? Статья: {article['text']}"}
+        ]
+    }
+
+    response = requests.post(url, json=data)
+
+    if response.status_code == 200:
+        response_data = response.json()
+        if response_data['response'] == 'да':
+            await send_message(bot, article)
+    # else:
+    #     return f"Error: {response.status_code}, {response.text}"
 
 
 async def send_message(bot, article):
